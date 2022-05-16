@@ -1,1 +1,9 @@
 这是qt建立非模态窗口（几个窗口可以同时响应，同时点击操作）的说明，详细可以见：https://blog.csdn.net/u011555996/article/details/124460064
+注意：
+     1、父类中有子类的指针：dialog *socket_dialog;
+     2、父类子类都在自己的构造函数中设置自己为非模态：setWindowModality(Qt::WindowModality::NonModal);
+     3、在new子类时socket_dialog->setModal(false);//设置子类为非模态
+     4、父类在构建子类时，可以建立与子类之间通信：    connect(this,&MainWindow::MainSignal1,socket_dialog,&dialog::diaRead);   //发出信号相应
+
+                                                   connect(socket_dialog,&dialog::sendInt,this,&MainWindow::readInt);   //发出信号相应
+     5、子类构造函数中可以设置关闭窗口就析构的模式：this->setAttribute(Qt::WA_DeleteOnClose,true);//设置关闭就自动删除，不需要主动调用delete函数；设置该属性后该类必须用new来实例化
